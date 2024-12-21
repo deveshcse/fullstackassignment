@@ -10,10 +10,10 @@ import {
 
 const Header = () => {
   return (
-    <div className="flex sticky top-0 bg-background h-16 shrink-0 items-center gap-2  px-4">
+    <div className="flex sticky top-0 bg-gray-100 h-16 shrink-0 items-center gap-2 mt-5 rounded-lg">
       <SidebarTrigger className="-ml-1" />
-      <div className="w-full flex items-center justify-between space-x-5">
-        <div className="w-1/2 border p-1 rounded-md flex items-center justify-start gap-2">
+      <div className="w-full flex items-center justify-between">
+        <div className="w-1/2 border p-1 rounded-md flex items-center justify-start gap-2 bg-white">
           <Search className="text-[#808281] " />
           <Input placeholder="Search your course" className="border-none" />
         </div>
@@ -37,7 +37,7 @@ const Header = () => {
               alt="userImage"
               className="rounded-lg"
             />
-            <span className="text-[#05162E] text-lg font-semibold ">
+            <span className="text-[#05162E] text-lg font-semibold pr-4 ">
               Adeline H. Dancy
             </span>
           </div>
