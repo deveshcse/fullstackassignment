@@ -8,6 +8,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -45,29 +46,30 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar variant="side" className=""  >
+    <Sidebar variant="side" className="">
+      <SidebarHeader className="p-4">
+        <img
+          className="w-[98px] h-[42px] bg-[#ffffff]"
+          src="/logo.svg"
+          alt=""
+        />
+      </SidebarHeader>
+
       <SidebarContent className="">
         <SidebarGroup>
-          <SidebarGroupLabel className="my-6">
-            <img
-              className="w-[98px] h-[42px] bg-[#ffffff]"
-              src="/logo.svg"
-              alt=""
-            />
-          </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="">
               {items.map((item) => (
-                <SidebarMenuItem key={item.title} className="p-3">
+                <SidebarMenuItem key={item.title} className="p-2">
                   <SidebarMenuButton
                     asChild
-                    className="focus:bg-gray-200 focus:text-gray-950 text-gray-500"
+                    className="focus:bg-gray-200 focus:text-gray-950 text-gray-500 py-6 rounded-lg"
                   >
-                    <Link to={item.url} className="my-1  ">
-                      <div>
-                        <item.icon size={24} />
+                    <Link to={item.url} className="">
+                      <div >
+                        <item.icon  size={24} />
                       </div>
-                      <span className="text-base font-bold font-sans">
+                      <span className="font-sans font-bold text-base leading-[22px]">
                         {item.title}
                       </span>
                     </Link>
