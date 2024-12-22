@@ -98,7 +98,6 @@ const DialogForm = () => {
                   <FormControl>
                     <Input
                       placeholder="AY 2024-25"
-                      defaultValue="AY 2024-25"
                       {...field}
                     />
                   </FormControl>
@@ -116,7 +115,6 @@ const DialogForm = () => {
                   <FormControl>
                     <Input
                       placeholder="CBSE 9 Science"
-                      defaultValue="CBSE 9 Science"
                       {...field}
                     />
                   </FormControl>
@@ -134,7 +132,6 @@ const DialogForm = () => {
                   <FormControl>
                     <Input
                       placeholder="CBSE 9 Math"
-                      defaultValue="CBSE 9 Math"
                       {...field}
                     />
                   </FormControl>
@@ -150,7 +147,7 @@ const DialogForm = () => {
                 <FormItem>
                   <FormLabel>Date Joined</FormLabel>
                   <FormControl>
-                    <Input type="date" defaultValue="2024-11-17" {...field} />
+                    <Input type="date"  {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -166,7 +163,6 @@ const DialogForm = () => {
                   <FormControl>
                     <Input
                       type="datetime-local"
-                      defaultValue="2024-11-17T16:16"
                       {...field}
                     />
                   </FormControl>
