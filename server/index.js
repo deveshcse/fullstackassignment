@@ -9,15 +9,14 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true }));
 
 
-const origin = process.env.FRONTEND_BASE_URL;
 const backend_port = process.env.BACKEND_PORT || 3000;
 console.log(origin, backend_port);
 
 app.use(cors({
-    origin: origin, // Allow requests from your frontend
-    methods: ['GET', 'POST'], // Allow only GET and POST requests (or other methods if needed)
-    allowedHeaders: ['Content-Type'] // Allow Content-Type header
-  }));
+    origin: '*', // Allow requests from any origin
+    methods: '*', // Allow all HTTP methods
+    allowedHeaders: '*' // Allow all headers
+}));
 
 const crudRouter = require('./routes/studentsRoutes');
 
