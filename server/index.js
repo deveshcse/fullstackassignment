@@ -10,8 +10,6 @@ app.use(express.urlencoded({extended: true }));
 
 
 const backend_port = process.env.BACKEND_PORT || 3000;
-console.log(origin, backend_port);
-
 app.use(cors({
     origin: '*', // Allow requests from any origin
     methods: '*', // Allow all HTTP methods
