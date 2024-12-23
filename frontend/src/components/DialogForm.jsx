@@ -5,6 +5,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import {
+  useGetStudentsQuery,
+  useAddNewStudentMutation,
+  useUpdateStudentMutation,
+} from "../../utils/apiSlice";
 
 import {
   Dialog,
@@ -37,53 +42,74 @@ const FormSchema = z.object({
   status: z.boolean(),
 });
 
-const DialogForm = () => {
+const DialogForm = ({ buttonType, props }) => {
+  const {
+    id,
+    studentName,
+    cohort,
+    course1,
+    course2,
+    dateJoined,
+    lastLogin,
+    status,
+  } = props || {};
+
+  const transformDate = (isoString) => isoString?.split("T")[0]; // For "type=date"
+  const transformDateTime = (isoString) =>
+    isoString?.replace("Z", "").slice(0, 16); // For "type=datetime-local"
+  const [addNewStudent] = useAddNewStudentMutation();
+  const [updateStudent] = useUpdateStudentMutation();
+
+  const { refetch } = useGetStudentsQuery();
+
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      studentName: "Vatsal Trivedi",
-      cohort: "AY 2024-25",
-      course1: "CBSE 9 Science",
-      course2: "CBSE 9 Math",
-      dateJoined: "2024-11-17",
-      lastLogin: "2024-11-17T16:16",
-      status: true,
+      studentName: studentName,
+      cohort: cohort,
+      course1: course1,
+      course2: course2,
+      dateJoined: transformDate(dateJoined), // Convert to "yyyy-MM-dd"
+      lastLogin: transformDateTime(lastLogin), // Convert to "yyyy-MM-ddTHH:mm"
+      status: status,
     },
   });
 
-
   async function onSubmit(data) {
     console.log("Submitted data:", data);
-    
-  
+
     // Convert dateJoined and lastLogin to ISO 8601 format
     const formattedData = {
       ...data,
       dateJoined: new Date(data.dateJoined).toISOString(), // Convert date to ISO format
       lastLogin: new Date(data.lastLogin).toISOString(), // Convert datetime to ISO format
     };
-  
-    try {
-      const response = await fetch('http://localhost:3000/api/addnewstudent', {
-        method: 'POST', // HTTP method
-        headers: {
-          'Content-Type': 'application/json', // Sending JSON data
-        },
-        body: JSON.stringify(formattedData), // Send formatted data
-      });
-  
-      if (response.ok) {
-        const result = await response.json(); // Parse JSON response
 
+    if (buttonType === "Add new Student") {
+      try {
+        const result = await addNewStudent(formattedData).unwrap();
+        refetch();
         console.log("Response from backend:", result);
-      } else {
-        console.error("Failed to send data:", response.status, response.statusText);
+      } catch (error) {
+        console.error("Error sending data to backend:", error);
       }
-    } catch (error) {
-      console.error("Error sending data to backend:", error);
+    }
+
+    if (buttonType === "Edit") {
+      console.log("trying to edit");
+      console.log(id);
+      try {
+        const result = await updateStudent({
+          id: id,
+          studentData: formattedData,
+        }).unwrap();
+        console.log("Student updated:", result);
+        refetch();
+      } catch (error) {
+        console.error("Error updating student:", error);
+      }
     }
   }
-  
 
   return (
     <Dialog>
@@ -92,7 +118,7 @@ const DialogForm = () => {
           variant="outline"
           className="bg-[#E9EDF1] text-[#3F526E] font-bold"
         >
-          <Plus /> Add new Student
+          <Plus /> {buttonType}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
@@ -103,7 +129,10 @@ const DialogForm = () => {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 grid">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-2 grid"
+          >
             <FormField
               control={form.control}
               name="studentName"
@@ -125,10 +154,7 @@ const DialogForm = () => {
                 <FormItem>
                   <FormLabel>Cohort</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="AY 2024-25"
-                      {...field}
-                    />
+                    <Input placeholder="AY 2024-25" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -142,10 +168,7 @@ const DialogForm = () => {
                 <FormItem>
                   <FormLabel>Course 1</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="CBSE 9 Science"
-                      {...field}
-                    />
+                    <Input placeholder="CBSE 9 Science" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -159,10 +182,7 @@ const DialogForm = () => {
                 <FormItem>
                   <FormLabel>Course 2</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="CBSE 9 Math"
-                      {...field}
-                    />
+                    <Input placeholder="CBSE 9 Math" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -176,7 +196,7 @@ const DialogForm = () => {
                 <FormItem>
                   <FormLabel>Date Joined</FormLabel>
                   <FormControl>
-                    <Input type="date"  {...field} />
+                    <Input type="date" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -190,10 +210,7 @@ const DialogForm = () => {
                 <FormItem>
                   <FormLabel>Last Login</FormLabel>
                   <FormControl>
-                    <Input
-                      type="datetime-local"
-                      {...field}
-                    />
+                    <Input type="datetime-local" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -216,7 +233,14 @@ const DialogForm = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="active:bg-gray-500">Submit</Button>
+            <Button
+              type="submit"
+              className={`active:bg-gray-500 ${
+                buttonType === "Edit" ? "bg-blue-500" : "bg-green-500"
+              }`}
+            >
+              {buttonType === "Edit" ? "Update Student" : "Add New Student"}
+            </Button>
           </form>
         </Form>
       </DialogContent>

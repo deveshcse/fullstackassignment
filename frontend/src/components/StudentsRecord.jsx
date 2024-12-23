@@ -4,6 +4,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { EllipsisVertical } from "lucide-react";
 
 import {
   Table,
@@ -15,12 +17,25 @@ import {
 } from "@/components/ui/table";
 import DialogForm from "./DialogForm";
 import { useGetStudentsQuery } from "../../utils/apiSlice";
+import { formatDate, formatDateTime } from "../..//utils/formatDates";
+import { useDeleteStudentMutation } from "../../utils/apiSlice";
 
 const StudentsRecord = () => {
+  const { data, isLoading, isFetching, isError, refetch } =
+    useGetStudentsQuery();
+  const [deleteStudent] = useDeleteStudentMutation();
 
+  const handleDelete = async (id) => {
+    console.log(id, typeof id);
 
-  const { data, isLoading, isFetching, isError } = useGetStudentsQuery();
-
+    try {
+      const result = await deleteStudent(id).unwrap();
+      console.log("Student deleted:", result);
+      refetch();
+    } catch (error) {
+      console.error("Error deleting student:", error);
+    }
+  };
   return (
     <div className="flex flex-col px-2">
       <div className="p-4 w-full flex items-center justify-between ">
@@ -28,7 +43,7 @@ const StudentsRecord = () => {
           <Filters props="AY 2024-25" />
           <Filters props="CBSE 9" />
         </div>
-        <DialogForm />
+        <DialogForm buttonType="Add new Student" />
       </div>
 
       <div className="px-4">
@@ -57,21 +72,27 @@ const StudentsRecord = () => {
           </TableHeader>
           <TableBody className="">
             {isFetching ? (
-              <p>Fetching.....</p>
+              <TableRow>
+                <TableCell>Fetching.....</TableCell>
+              </TableRow>
             ) : isLoading ? (
-              <p>Loading...</p>
+              <TableRow>
+                <TableCell>Loading.....</TableCell>
+              </TableRow>
             ) : isError ? (
-              <p>Error....</p>
+              <TableRow>
+                <TableCell>Error.....</TableCell>
+              </TableRow>
             ) : (
               data?.map((student) => (
                 <TableRow
                   key={student.id}
-                  className=" group font-sans font-normal text-xs leading-[16px] hover:bg-gray-200"
+                  className="group font-sans font-normal text-xs leading-[16px] hover:bg-gray-200"
                 >
                   <TableCell className="">{student.studentName}</TableCell>
-                  <TableCell>{student.cohort}</TableCell>
-                  <TableCell className="flex items-center space-x-2">
-                    <div className="flex items-center space-x-2 min-w-36">
+                  <TableCell className="">{student.cohort}</TableCell>
+                  <TableCell className="flex flex-row items-center justify-start h-full">
+                    <div className="min-w-40 flex items-center space-x-2">
                       <img
                         src={`/imageIcon0.svg`}
                         alt="imageIcon"
@@ -79,7 +100,7 @@ const StudentsRecord = () => {
                       />
                       <span>{student.course1}</span>
                     </div>
-                    <div className="flex items-center space-x-2 ">
+                    <div className="flex items-center space-x-2">
                       <img
                         src={`/imageIcon1.svg`}
                         alt="imageIcon"
@@ -88,9 +109,10 @@ const StudentsRecord = () => {
                       <span>{student.course2}</span>
                     </div>
                   </TableCell>
-                  <TableCell>{student.dateJoined}</TableCell>
-                  <TableCell>{student.lastLogin} </TableCell>
-                  <TableCell className=" flex justify-center">
+
+                  <TableCell>{formatDate(student.dateJoined)}</TableCell>
+                  <TableCell>{formatDateTime(student.lastLogin)} </TableCell>
+                  <TableCell className="flex items-center justify-center">
                     <div
                       className={`h-4 w-4 rounded-full ${
                         student.status ? "bg-red-500" : "bg-green-500"
@@ -98,7 +120,20 @@ const StudentsRecord = () => {
                     ></div>
                   </TableCell>
                   <TableCell className="opacity-0 group-hover:opacity-100 text-black text-md font-bold">
-                    ...
+                    <Popover>
+                      <PopoverTrigger className="text-justify">
+                        <EllipsisVertical />
+                      </PopoverTrigger>
+                      <PopoverContent className="mr-10 w-52 flex items-center justify-center gap-5 px-2">
+                        <Button
+                          variant="destructive"
+                          onClick={() => handleDelete(student.id)}
+                        >
+                          Delete
+                        </Button>
+                        <DialogForm buttonType="Edit" props={student} />
+                      </PopoverContent>
+                    </Popover>
                   </TableCell>
                 </TableRow>
               ))

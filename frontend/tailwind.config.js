@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-		sans: ['"Noto Sans"', 'sans-serif'],      },
+		sans: ['Noto Sans', 'sans-serif'],      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
