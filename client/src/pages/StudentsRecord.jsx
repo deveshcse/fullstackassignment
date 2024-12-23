@@ -16,9 +16,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import DialogForm from "./DialogForm";
-import { useGetStudentsQuery } from "../../utils/apiSlice";
-import { formatDate, formatDateTime } from "../..//utils/formatDates";
-import { useDeleteStudentMutation } from "../../utils/apiSlice";
+import { useGetStudentsQuery } from "../redux/api/studentApiSlice";
+import { formatDate, formatDateTime } from "../utils/formatDates";
+import { useDeleteStudentMutation } from "../redux/api/studentApiSlice";
 
 const StudentsRecord = () => {
   const { data, isLoading, isFetching, isError, refetch } =
@@ -115,7 +115,7 @@ const StudentsRecord = () => {
                   <TableCell className="flex items-center justify-center">
                     <div
                       className={`h-4 w-4 rounded-full ${
-                        student.status ? "bg-red-500" : "bg-green-500"
+                        student.status ? "bg-green-500" : "bg-red-500"
                       }`}
                     ></div>
                   </TableCell>

@@ -1,4 +1,4 @@
-import { SidebarTrigger } from "./ui/sidebar";
+import { SidebarTrigger } from "../components/ui/sidebar";
 import { Input } from "@/components/ui/input";
 import {
   Search,

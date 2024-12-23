@@ -1,12 +1,20 @@
+require('dotenv').config();
+
 const express = require('express');
+
 const cors = require('cors');
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
 
+
+const origin = process.env.FRONTEND_BASE_URL;
+const backend_port = process.env.BACKEND_PORT || 3000;
+console.log(origin, backend_port);
+
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow requests from your frontend
+    origin: origin, // Allow requests from your frontend
     methods: ['GET', 'POST'], // Allow only GET and POST requests (or other methods if needed)
     allowedHeaders: ['Content-Type'] // Allow Content-Type header
   }));
@@ -21,7 +29,7 @@ app.get('/', (req, res) =>{
 })
 
 
-app.listen(3000, () => {
-    console.log("server is running on port 3000");
+app.listen(backend_port, () => {
+    console.log(`server is running on port ${backend_port}`);
     
 })

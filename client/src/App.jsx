@@ -1,6 +1,6 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-import Layout from "./components/Layout";
-import StudentsRecord from "./components/StudentsRecord";
+import Layout from "./pages/Layout";
+import StudentsRecord from "./pages/StudentsRecord";
 
 const AppLayout = () => {
   return (

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { api } from "./apiSlice";
+import { api } from "./api/studentApiSlice";
 export const appStore = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,

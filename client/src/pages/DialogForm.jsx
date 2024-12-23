@@ -9,7 +9,7 @@ import {
   useGetStudentsQuery,
   useAddNewStudentMutation,
   useUpdateStudentMutation,
-} from "../../utils/apiSlice";
+} from "../redux/api/studentApiSlice";
 
 import {
   Dialog,
@@ -71,12 +71,14 @@ const DialogForm = ({ buttonType, props }) => {
       course2: course2,
       dateJoined: transformDate(dateJoined), // Convert to "yyyy-MM-dd"
       lastLogin: transformDateTime(lastLogin), // Convert to "yyyy-MM-ddTHH:mm"
-      status: status,
+      status: status || true,
     },
   });
 
+
   async function onSubmit(data) {
     console.log("Submitted data:", data);
+    
 
     // Convert dateJoined and lastLogin to ISO 8601 format
     const formattedData = {
@@ -109,6 +111,8 @@ const DialogForm = ({ buttonType, props }) => {
         console.error("Error updating student:", error);
       }
     }
+
+    
   }
 
   return (

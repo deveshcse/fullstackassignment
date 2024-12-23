@@ -1,10 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const BACKEND_BASE_URL= import.meta.env.VITE_BACKEND_BASE_URL;
+
+console.log(BACKEND_BASE_URL);
+
+
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${BACKEND_BASE_URL}` }),
   endpoints: (builder) => ({
     getStudents: builder.query({
       query: () => "/allstudents",
+      transformResponse: (data) => data.reverse(),
     }),
     addNewStudent: builder.mutation({
       query: (studentData) => ({
