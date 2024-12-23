@@ -4,6 +4,7 @@
   "description": "backend application for assignment",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "dev": "nodemon index.js"
   },
   "author": "Devesh Mishra",

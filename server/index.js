@@ -21,7 +21,7 @@ const crudRouter = require('./routes/studentsRoutes');
 app.use('/api', crudRouter)
 
 app.get('/', (req, res) =>{
-    res.send("hi from backend...")
+    res.send("Hi from Server...");
 })
 
 
