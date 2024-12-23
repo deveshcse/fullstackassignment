@@ -28,6 +28,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <AppLayout />,
     children: [
+      { path: "/", element: <StudentsRecord /> }, // setting this to view Student record page on starting
       { path: "/students", element: <StudentsRecord /> },
       { path: "*", element: <NotFoundPage /> },
     ],
