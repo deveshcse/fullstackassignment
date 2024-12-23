@@ -54,9 +54,12 @@ const DialogForm = ({ buttonType, props }) => {
     status,
   } = props || {};
 
+  // Dates transformation for rendering
   const transformDate = (isoString) => isoString?.split("T")[0]; // For "type=date"
   const transformDateTime = (isoString) =>
     isoString?.replace("Z", "").slice(0, 16); // For "type=datetime-local"
+
+
   const [addNewStudent] = useAddNewStudentMutation();
   const [updateStudent] = useUpdateStudentMutation();
 
@@ -75,10 +78,8 @@ const DialogForm = ({ buttonType, props }) => {
     },
   });
 
-
   async function onSubmit(data) {
     console.log("Submitted data:", data);
-    
 
     // Convert dateJoined and lastLogin to ISO 8601 format
     const formattedData = {
@@ -87,6 +88,8 @@ const DialogForm = ({ buttonType, props }) => {
       lastLogin: new Date(data.lastLogin).toISOString(), // Convert datetime to ISO format
     };
 
+
+    // form data submit handling for new records
     if (buttonType === "Add new Student") {
       try {
         const result = await addNewStudent(formattedData).unwrap();
@@ -97,6 +100,7 @@ const DialogForm = ({ buttonType, props }) => {
       }
     }
 
+    //form data submit handling for Editing of records
     if (buttonType === "Edit") {
       console.log("trying to edit");
       console.log(id);
@@ -111,8 +115,6 @@ const DialogForm = ({ buttonType, props }) => {
         console.error("Error updating student:", error);
       }
     }
-
-    
   }
 
   return (
@@ -150,7 +152,7 @@ const DialogForm = ({ buttonType, props }) => {
                 </FormItem>
               )}
             />
-            {/* Other fields here */}
+
             <FormField
               control={form.control}
               name="cohort"

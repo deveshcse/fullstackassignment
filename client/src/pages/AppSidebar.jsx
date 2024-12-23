@@ -7,7 +7,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -51,7 +50,7 @@ export function AppSidebar() {
         <img
           className="w-[98px] h-[42px] bg-[#ffffff]"
           src="/logo.svg"
-          alt=""
+          alt="logo"
         />
       </SidebarHeader>
 
@@ -66,8 +65,8 @@ export function AppSidebar() {
                     className="focus:bg-gray-200 focus:text-gray-950 text-gray-500 py-6 rounded-lg"
                   >
                     <Link to={item.url} className="">
-                      <div >
-                        <item.icon  size={24} />
+                      <div>
+                        <item.icon size={24} />
                       </div>
                       <span className="font-sans font-bold text-base leading-[22px]">
                         {item.title}

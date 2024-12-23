@@ -25,7 +25,6 @@ const Header = () => {
           <div className="flex items-center relative">
             <MessageSquareMore />
             <div className=" p-1 border-2 border-white absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full"></div>
-
           </div>
           <div>
             <Settings2 />
