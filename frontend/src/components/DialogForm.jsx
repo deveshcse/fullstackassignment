@@ -51,10 +51,39 @@ const DialogForm = () => {
     },
   });
 
-  function onSubmit(data) {
 
+  async function onSubmit(data) {
     console.log("Submitted data:", data);
+    
+  
+    // Convert dateJoined and lastLogin to ISO 8601 format
+    const formattedData = {
+      ...data,
+      dateJoined: new Date(data.dateJoined).toISOString(), // Convert date to ISO format
+      lastLogin: new Date(data.lastLogin).toISOString(), // Convert datetime to ISO format
+    };
+  
+    try {
+      const response = await fetch('http://localhost:3000/api/addnewstudent', {
+        method: 'POST', // HTTP method
+        headers: {
+          'Content-Type': 'application/json', // Sending JSON data
+        },
+        body: JSON.stringify(formattedData), // Send formatted data
+      });
+  
+      if (response.ok) {
+        const result = await response.json(); // Parse JSON response
+
+        console.log("Response from backend:", result);
+      } else {
+        console.error("Failed to send data:", response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error("Error sending data to backend:", error);
+    }
   }
+  
 
   return (
     <Dialog>
@@ -187,7 +216,7 @@ const DialogForm = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" className="active:bg-gray-500">Submit</Button>
           </form>
         </Form>
       </DialogContent>

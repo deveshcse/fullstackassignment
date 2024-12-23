@@ -10,7 +10,7 @@ import {
 
 const Header = () => {
   return (
-    <div className="flex sticky top-0 bg-gray-100 h-16 shrink-0 items-center gap-2 mt-5 rounded-lg">
+    <div className="flex sticky z-50 top-0 bg-gray-100 h-16 shrink-0 items-center gap-2 mt-5 rounded-lg">
       <SidebarTrigger className="-ml-1" />
       <div className="w-full flex items-center justify-between gap-4">
         <div className="w-1/2 border p-1 rounded-md flex items-center justify-start gap-2 bg-white">

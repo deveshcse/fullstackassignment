@@ -1,7 +1,9 @@
-import React from "react";
 import Filters from "./Filters";
-import { Button } from "./ui/button";
-import { Plus } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 import {
   Table,
@@ -11,44 +13,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import DialogForm from "./DialogForm";
+import { useGetStudentsQuery } from "../../utils/apiSlice";
 
 const StudentsRecord = () => {
-  const students = [
-    {
-      studentName: "Devesh Mishra",
-      cohort: "AY 2024-25",
-      courses: ["CBSE 9 Science", "CBSE 9 Math"],
-      dateJoined: "17 NOV 2024",
-      lastLogin: "17 NOV 2024 4:16 PM",
-      status: true,
-    },
-    {
-      studentName: "Aarav Sharma",
-      cohort: "AY 2024-25",
-      courses: ["CBSE 10 Science", "CBSE 10 Math"],
-      dateJoined: "18 NOV 2024",
-      lastLogin: "19 NOV 2024 2:10 PM",
-      status: false,
-    },
-    {
-      studentName: "Ishika Gupta",
-      cohort: "AY 2023-24",
-      courses: ["CBSE 8 English", "CBSE 8 Math"],
-      dateJoined: "15 OCT 2023",
-      lastLogin: "16 OCT 2023 3:45 PM",
-      status: true,
-    },
-    {
-      studentName: "Rohan Mehta",
-      cohort: "AY 2025-26",
-      courses: ["CBSE 7 Science", "CBSE 7 Social Studies"],
-      dateJoined: "10 DEC 2025",
-      lastLogin: "11 DEC 2025 1:30 PM",
-      status: false,
-    },
-  ];
+
+
+  const { data, isLoading, isFetching, isError } = useGetStudentsQuery();
 
   return (
     <div className="flex flex-col px-2">
@@ -61,7 +32,7 @@ const StudentsRecord = () => {
       </div>
 
       <div className="px-4">
-        <Table className="">
+        <Table>
           <TableHeader className="">
             <TableRow>
               <TableHead className="text-[#000000] font-bold text-xs leading-[16px]">
@@ -84,42 +55,54 @@ const StudentsRecord = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {students.map((student) => (
-              <TableRow
-                key={student.studentName}
-                className="font-sans font-normal text-xs leading-[16px]"
-              >
-                <TableCell className="">{student.studentName}</TableCell>
-                <TableCell>{student.cohort}</TableCell>
-                <TableCell>
-                  <div className="flex space-x-4">
-                    {student.courses.map((course, index) => (
-                      <div
-                        className="flex items-center space-x-2 min-w-36"
-                        key={course}
-                      >
-                        <img
-                          src={`/imageIcon${index}.svg`}
-                          alt="imageIcon"
-                          className="w-6 h-6"
-                        />
-                        <span>{course}</span>
-                      </div>
-                    ))}
-                  </div>
-                </TableCell>
-                <TableCell>{student.dateJoined}</TableCell>
-                <TableCell>{student.lastLogin} </TableCell>
-                <TableCell className="flex items-center justify-center">
-                  <div
-                    className={`h-4 w-4 rounded-full ${
-                      student.status ? "bg-red-500" : "bg-green-500"
-                    }`}
-                  ></div>
-                </TableCell>
-              </TableRow>
-            ))}
+          <TableBody className="">
+            {isFetching ? (
+              <p>Fetching.....</p>
+            ) : isLoading ? (
+              <p>Loading...</p>
+            ) : isError ? (
+              <p>Error....</p>
+            ) : (
+              data?.map((student) => (
+                <TableRow
+                  key={student.id}
+                  className=" group font-sans font-normal text-xs leading-[16px] hover:bg-gray-200"
+                >
+                  <TableCell className="">{student.studentName}</TableCell>
+                  <TableCell>{student.cohort}</TableCell>
+                  <TableCell className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 min-w-36">
+                      <img
+                        src={`/imageIcon0.svg`}
+                        alt="imageIcon"
+                        className="w-6 h-6"
+                      />
+                      <span>{student.course1}</span>
+                    </div>
+                    <div className="flex items-center space-x-2 ">
+                      <img
+                        src={`/imageIcon1.svg`}
+                        alt="imageIcon"
+                        className="w-6 h-6"
+                      />
+                      <span>{student.course2}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>{student.dateJoined}</TableCell>
+                  <TableCell>{student.lastLogin} </TableCell>
+                  <TableCell className=" flex justify-center">
+                    <div
+                      className={`h-4 w-4 rounded-full ${
+                        student.status ? "bg-red-500" : "bg-green-500"
+                      }`}
+                    ></div>
+                  </TableCell>
+                  <TableCell className="opacity-0 group-hover:opacity-100 text-black text-md font-bold">
+                    ...
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>
