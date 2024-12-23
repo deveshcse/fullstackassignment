@@ -19,8 +19,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type'] // Allow Content-Type header
   }));
 
-
-const crudRouter = require('./routes/crudRoutes');
+const crudRouter = require('./routes/studentsRoutes');
 
 app.use('/api', crudRouter)
 
